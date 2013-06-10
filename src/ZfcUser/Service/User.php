@@ -143,9 +143,9 @@ class User extends EventProvider implements ServiceManagerAwareInterface
         $bcrypt->setCost($this->getOptions()->getPasswordCost());
         $user->setPassword($bcrypt->create($password));
 
-        $this->getEventManager()->trigger(__FUNCTION__, $this, array('user' => $user));
-        $this->getUserMapper()->update($user);
-        $this->getEventManager()->trigger(__FUNCTION__.'.post', $this, array('user' => $user));
+        // $this->getEventManager()->trigger(__FUNCTION__, $this, array('user' => $user));
+        // $this->getUserMapper()->update($user);
+        // $this->getEventManager()->trigger(__FUNCTION__.'.post', $this, array('user' => $user));
     }
 
     public function changeEmail(array $data)
