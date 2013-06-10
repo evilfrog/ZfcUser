@@ -131,6 +131,23 @@ class User extends EventProvider implements ServiceManagerAwareInterface
         return true;
     }
 
+    /**
+     * Sets the password for provided user - no dependency on AuthService..
+     *
+     * @param \ZfcUser\Entity\UserInterface $user
+     * @param string $password
+     */
+    public function setPassword(\ZfcUser\Entity\UserInterface $user, $password = '')
+    {
+        $bcrypt = new Bcrypt;
+        $bcrypt->setCost($this->getOptions()->getPasswordCost());
+        $user->setPassword($bcrypt->create($password));
+
+        $this->getEventManager()->trigger(__FUNCTION__, $this, array('user' => $user));
+        $this->getUserMapper()->update($user);
+        $this->getEventManager()->trigger(__FUNCTION__.'.post', $this, array('user' => $user));
+    }
+
     public function changeEmail(array $data)
     {
         $currentUser = $this->getAuthService()->getIdentity();
